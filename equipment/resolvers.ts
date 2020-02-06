@@ -21,14 +21,14 @@ export const resolvers: GraphQLResolverMap<any> = {
         }
     },
     Equipment: {
-        // async exercises(root: Equipment, args, { dataSources }): Promise<Exercise[]> {
-        //     const exerciseAPI: ExerciseAPI = dataSources.exerciseAPI;
-
-        //     const exercises = await exerciseAPI.getExercises();
-
-        //     const exercisesForEquipment = exercises.filter(exercise => exercise.equipment.some(equipment => equipment.id === root.id));
-
-        //     return exercisesForEquipment;
+        __resolveReference({ id }, { dataSources: { equipmentAPI } }: { dataSources: { equipmentAPI: EquipmentAPI } }): Promise<Equipment> {
+            return equipmentAPI.getEquipmentById(id);
+        },
+        // exercises(root: Equipment, args, { dataSources }) {
+        //     return {
+        //         __typename: 'Exercise',
+        //         id: root.id
+        //     };
         // }
     }
 }

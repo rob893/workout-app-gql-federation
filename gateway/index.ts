@@ -7,11 +7,14 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
     }
 }
 
+const rootUrl = 'http://localhost:7072';
+
 const gateway = new ApolloGateway({
     serviceList: [
-        { name: 'users', url: 'http://localhost:7072/users' },
-        { name: 'equipment', url: 'http://localhost:7072/equipment' },
-        { name: 'exercises', url: 'http://localhost:7072/exercises' }
+        { name: 'users', url: `${rootUrl}/users` },
+        { name: 'equipment', url: `${rootUrl}/equipment` },
+        { name: 'exercises', url: `${rootUrl}/exercises` },
+        { name: 'muscles', url: `${rootUrl}/muscles` }
     ],
     buildService({ url }) {
         return new AuthenticatedDataSource({ url });

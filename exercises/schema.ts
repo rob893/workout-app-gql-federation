@@ -6,12 +6,14 @@ export const typeDefs = gql`
         exercises: [Exercise]
     }
 
-    type Exercise {
+    type Exercise @key(fields: "id") {
         id: ID!
         name: String!
+        primaryMuscle: Muscle @provides(fields: "name")
+        secondaryMuscle: Muscle @provides(fields: "name")
         exerciseSteps: [ExerciseStep]
         exerciseCategorys: [ExerciseCategory]
-        equipment: [Equipment]
+        equipment: [Equipment] @provides(fields: "name")
     }
 
     type ExerciseStep {
@@ -27,5 +29,11 @@ export const typeDefs = gql`
 
     extend type Equipment @key(fields: "id") {
         id: ID! @external
+        name: String! @external
+    }
+
+    extend type Muscle @key(fields: "id") {
+        id: ID! @external
+        name: String! @external
     }
 `;

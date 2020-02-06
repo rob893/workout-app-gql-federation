@@ -3,31 +3,42 @@ import { Exercise, ExerciseCategory } from "./entities";
 import { ExerciseAPI } from "./ExerciseAPI";
 
 
-export const resolvers: GraphQLResolverMap<any> = {
+export const resolvers: GraphQLResolverMap<{ dataSources: { exerciseAPI: ExerciseAPI } }> = {
     Query: {
-        async exercises(root, args, { dataSources }): Promise<Exercise[]> {
-            const exerciseAPI: ExerciseAPI = dataSources.exerciseAPI;
-
-            const exercises = await exerciseAPI.getExercises();
-
-            return exercises;
+        exercises(root, args, { dataSources }): Promise<Exercise[]> {
+            return dataSources.exerciseAPI.getExercises();
         },
 
-        async exercise(root, { id }, { dataSources }): Promise<Exercise | null> {
-            const exerciseAPI: ExerciseAPI = dataSources.exerciseAPI;
-
-            const exercise = await exerciseAPI.getExerciseById(id);
-
-            return exercise;
+        exercise(root, { id }, { dataSources }): Promise<Exercise | null> {
+            return dataSources.exerciseAPI.getExerciseById(id);
         }
     },
     Exercise: {
         equipment(parent: Exercise) {
+            return parent.equipment.map(e => {
+                return {
+                    __typename: 'Equipment',
+                    id: e.id,
+                    name: e.name
+                }
+            });
+        },
+        
+        primaryMuscle(parent: Exercise) {
             return {
-                __typename: 'Equipment',
-                id: parent
+                __typename: 'Muscle',
+                id: parent.primaryMuscle.id,
+                name: parent.primaryMuscle.name
             };
-        }
+        },
+
+        secondaryMuscle(parent: Exercise) {
+            return {
+                __typename: 'Muscle',
+                id: parent.secondaryMuscle.id,
+                name: parent.secondaryMuscle.name
+            };
+        },
     },
     ExerciseCategory: {
         async exercises(root: ExerciseCategory, args, { dataSources }): Promise<Exercise[]> {
