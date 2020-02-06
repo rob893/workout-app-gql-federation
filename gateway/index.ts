@@ -7,7 +7,7 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
     }
 }
 
-const rootUrl = 'http://localhost:7072';
+const rootUrl = 'https://rherber-gql-gateway.azurewebsites.net/';
 
 const gateway = new ApolloGateway({
     serviceList: [

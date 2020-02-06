@@ -33,11 +33,11 @@ export const resolvers: GraphQLResolverMap<{ dataSources: { exerciseAPI: Exercis
         },
 
         secondaryMuscle(parent: Exercise) {
-            return {
+            return parent.secondaryMuscle ? {
                 __typename: 'Muscle',
                 id: parent.secondaryMuscle.id,
                 name: parent.secondaryMuscle.name
-            };
+            } : null;
         },
     },
     ExerciseCategory: {
